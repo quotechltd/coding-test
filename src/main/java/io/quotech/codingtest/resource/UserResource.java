@@ -59,4 +59,20 @@ public class UserResource {
       throws UserNotFoundException, UserUpdateException {
     return ResponseEntity.ok(userService.updateUser(clientId, userId, user));
   }
+
+  /**
+   * Deletes the given user if it exists and returns it.
+   * @param clientId ID of the client
+   * @param userId ID of the user
+   * @return The deleted user
+   * @throws UserNotFoundException If the user does not exist.
+   */
+  @PostMapping ("/clients/{clientId}/users/delete/{userId}")
+  public ResponseEntity<User> delete(
+          @PathVariable final String clientId,
+          @PathVariable final String userId)
+          throws UserNotFoundException {
+    return ResponseEntity.status(HttpStatus.ACCEPTED)
+            .body(userService.deleteUser(clientId, userId));
+  }
 }

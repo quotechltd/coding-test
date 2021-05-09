@@ -98,4 +98,23 @@ public class UserResourceTest {
     assertThrows(UserNotFoundException.class, () -> userResource.update("client1", "user1", user1));
 
   }
+
+  @Test
+  public void whenDeletingUser_willReturnNewlyCreatedUser() throws UserNotFoundException {
+    User user1 = mock(User.class);
+    when(userService.deleteUser("client1", "user1")).thenReturn(user1);
+
+    ResponseEntity<User> result = userResource.delete("client1", "user1");
+
+    assertThat(result.getStatusCode(), is(HttpStatus.ACCEPTED));
+    assertThat(result.getBody(), is(user1));
+  }
+
+  @Test
+  public void whenDeletingNotExistingUser_willThrowException() throws UserNotFoundException {
+    User user1 = mock(User.class);
+    when(userService.deleteUser("client1", "user1")).thenThrow(new UserNotFoundException());
+
+    assertThrows(UserNotFoundException.class, () -> userResource.delete("client1", "user1"));
+  }
 }

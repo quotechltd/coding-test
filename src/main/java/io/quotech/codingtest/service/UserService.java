@@ -73,4 +73,18 @@ public class UserService {
     io.quotech.codingtest.domain.User domain = UserMapper.map(clientId, user);
     return UserMapper.map(userRepository.save(domain));
   }
+
+  public User deleteUser(String clientId, String userId) throws UserNotFoundException {
+    EntityId id = EntityId.builder()
+            .withClientId(clientId)
+            .withId(userId)
+            .build();
+
+    User user = userRepository.findById(id)
+            .map(UserMapper::map)
+            .orElseThrow(UserNotFoundException::new);
+
+    userRepository.deleteById(id);
+    return user;
+  }
 }

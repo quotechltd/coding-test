@@ -7,6 +7,7 @@ import io.quotech.codingtest.exception.UserAlreadyExistsException;
 import io.quotech.codingtest.model.UserRole;
 import io.quotech.codingtest.exception.UserNotFoundException;
 import io.quotech.codingtest.model.User;
+import io.quotech.codingtest.model.mapper.UserMapper;
 import io.quotech.codingtest.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -87,6 +88,21 @@ public class UserServiceTest {
     assertThat(result.getMetadata().getCompanyName(), is(modelUser.getMetadata().getCompanyName()));
     assertThat(result.getMetadata().getJobTitle(), is(modelUser.getMetadata().getJobTitle()));
     assertThat(result.getMetadata().getRole(), is(modelUser.getMetadata().getRole()));
+  }
+
+  @Test
+  public void testDeleteUser() throws UserNotFoundException {
+    io.quotech.codingtest.domain.User user1 = mockDomainUser(
+            "client1", "user1", "Bob", "Doe", "bob.doe@quotech.io",
+            "quotech-test", "Quotech", "Test Manager", io.quotech.codingtest.domain.UserRole.internal);
+    EntityId id = EntityId.builder().withClientId("client1").withId("user1").build();
+    when(userRepository.findById(id)).thenReturn(Optional.of(user1));
+
+    User result = userService.deleteUser("client1", "user1");
+
+    assertThat(result.getUserId(), is("user1"));
+    assertThat(result.getMetadata().getFirstName(), is("Bob"));
+    assertThat(result.getMetadata().getLastName(), is("Doe"));
   }
 
   private io.quotech.codingtest.domain.User mockDomainUser(
