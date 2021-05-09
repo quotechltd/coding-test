@@ -26,6 +26,7 @@ public class UserService {
 
   public List<User> getAllUsers(String clientId) {
     return userRepository.findAll().stream()
+      .filter(user->user.getId().getClientId().equals(clientId))
       .map(UserMapper::map)
       .collect(Collectors.toList());
   }
