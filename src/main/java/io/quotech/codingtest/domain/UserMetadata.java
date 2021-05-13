@@ -98,7 +98,8 @@ public class UserMetadata {
     this.added = added;
   }
 
-  @Override public boolean equals(Object o) {
+  @Override
+  public boolean equals(Object o) {
     if (this == o)
       return true;
     if (o == null || getClass() != o.getClass())
@@ -107,11 +108,12 @@ public class UserMetadata {
     return Objects.equals(firstName, that.firstName) && Objects.equals(lastName, that.lastName)
       && Objects.equals(emailAddress, that.emailAddress) && Objects.equals(companyId, that.companyId)
       && Objects.equals(companyName, that.companyName) && Objects.equals(jobTitle, that.jobTitle)
-      && role == that.role && Objects.equals(added, that.added);
+      && role == that.role;
   }
 
-  @Override public int hashCode() {
-    return Objects.hash(firstName, lastName, emailAddress, companyId, companyName, jobTitle, role, added);
+  @Override
+  public int hashCode() {
+    return Objects.hash(firstName, lastName, emailAddress, companyId, companyName, jobTitle, role);
   }
 
   /**

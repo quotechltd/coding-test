@@ -44,7 +44,8 @@ public class User {
     this.metadata = metadata;
   }
 
-  @Override public boolean equals(Object o) {
+  @Override
+  public boolean equals(Object o) {
     if (this == o)
       return true;
     if (o == null || getClass() != o.getClass())
@@ -53,7 +54,8 @@ public class User {
     return Objects.equals(id, user.id) && Objects.equals(metadata, user.metadata);
   }
 
-  @Override public int hashCode() {
+  @Override
+  public int hashCode() {
     return Objects.hash(id, metadata);
   }
 
