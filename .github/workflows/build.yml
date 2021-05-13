@@ -1,0 +1,26 @@
+# This workflow will build a Java project with Gradle
+name: Java CI with Gradle
+
+on:
+  # Publish `main` as Docker `latest` image.
+  push:
+    branches:
+      - master
+  # Publish a release as a Docker specific version
+  release:
+    types:
+      - created
+      - edited
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code from GitHub
+      uses: actions/checkout@v2
+    - name: Set up JDK 11
+      uses: actions/setup-java@v1
+      with:
+        java-version: 11
+        server-id: github
+    - name: Build with Gradle
+      run: gradle clean build
