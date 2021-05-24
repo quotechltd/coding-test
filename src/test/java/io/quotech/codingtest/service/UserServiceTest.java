@@ -10,6 +10,8 @@ import io.quotech.codingtest.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -105,31 +107,21 @@ public class UserServiceTest {
     assertThat(result.getMetadata().getRole(), is(modelUser.getMetadata().getRole()));
   }
 
-  @Test
-  public void testDelete() {
+  @ParameterizedTest
+  @ValueSource(booleans = {true, false}) // six numbers
+  public void testDelete(final boolean userExists) {
     io.quotech.codingtest.domain.User user1 = mockDomainUser(
             "client1", "user1", "Bob", "Doe", "bob.doe@quotech.io",
             "quotech-test", "Quotech", "Test Manager", io.quotech.codingtest.domain.UserRole.internal);
     EntityId id = EntityId.builder().withClientId("client1").withId("user1").build();
-    when(userRepository.existsById(id)).thenReturn(true);
+    when(userRepository.existsById(id)).thenReturn(userExists);
 
     try {
       userService.deleteUser("client1", "user1");
       Assertions.assertTrue(true);
     } catch(UserNotFoundException e) {
-      Assertions.assertTrue(false);
+      assertThrows(UserNotFoundException.class, () -> userService.deleteUser("client1", "user1"));
     }
-  }
-
-  @Test
-  public void testDeleteThrowsException() {
-    io.quotech.codingtest.domain.User user1 = mockDomainUser(
-            "client1", "user1", "Bob", "Doe", "bob.doe@quotech.io",
-            "quotech-test", "Quotech", "Test Manager", io.quotech.codingtest.domain.UserRole.internal);
-    EntityId id = EntityId.builder().withClientId("client1").withId("user1").build();
-    when(userRepository.existsById(id)).thenReturn(false);
-
-    assertThrows(UserNotFoundException.class, () -> userService.deleteUser("client1", "user1"));
   }
 
   private io.quotech.codingtest.domain.User mockDomainUser(
