@@ -7,13 +7,7 @@ import io.quotech.codingtest.model.User;
 import io.quotech.codingtest.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -58,5 +52,14 @@ public class UserResource {
       @RequestBody final User user)
       throws UserNotFoundException, UserUpdateException {
     return ResponseEntity.ok(userService.updateUser(clientId, userId, user));
+  }
+
+  @DeleteMapping("/clients/{clientId}/users/{userId}")
+  public ResponseEntity<Void> delete(
+          @PathVariable final String clientId,
+          @PathVariable final String userId)
+          throws UserNotFoundException {
+    userService.deleteUser(clientId, userId);
+    return ResponseEntity.ok().build();
   }
 }

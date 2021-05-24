@@ -26,7 +26,8 @@ public class UserService {
 
   public List<User> getAllUsers(String clientId) {
     return userRepository.findAll().stream()
-      .map(UserMapper::map)
+            .filter(user -> user.getId().getClientId().equals(clientId))
+            .map(UserMapper::map)
       .collect(Collectors.toList());
   }
 
@@ -71,5 +72,18 @@ public class UserService {
     }
     io.quotech.codingtest.domain.User domain = UserMapper.map(clientId, user);
     return UserMapper.map(userRepository.save(domain));
+  }
+
+  public void deleteUser(String clientId, String userId) throws UserNotFoundException {
+    EntityId id = EntityId.builder()
+            .withClientId(clientId)
+            .withId(userId)
+            .build();
+
+    if (!userRepository.existsById(id)) {
+      throw new UserNotFoundException();
+    }
+
+    userRepository.deleteById(id);
   }
 }

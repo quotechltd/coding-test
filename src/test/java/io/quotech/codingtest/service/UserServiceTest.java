@@ -1,13 +1,13 @@
 package io.quotech.codingtest.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.quotech.codingtest.domain.EntityId;
-import io.quotech.codingtest.model.UserMetadata;
 import io.quotech.codingtest.exception.UserAlreadyExistsException;
-import io.quotech.codingtest.model.UserRole;
 import io.quotech.codingtest.exception.UserNotFoundException;
 import io.quotech.codingtest.model.User;
+import io.quotech.codingtest.model.UserMetadata;
+import io.quotech.codingtest.model.UserRole;
 import io.quotech.codingtest.repository.UserRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,8 +20,7 @@ import java.util.Optional;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
-import static org.mockito.Mockito.mock;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -49,6 +48,23 @@ public class UserServiceTest {
     assertThat(result.get(0).getUserId(), is("user1"));
     assertThat(result.get(0).getMetadata().getFirstName(), is("Bob"));
     assertThat(result.get(0).getMetadata().getLastName(), is("Doe"));
+  }
+
+  @Test
+  public void testGetAllReturnsAllClientsByClientId() {
+    io.quotech.codingtest.domain.User user1 = mockDomainUser(
+            "client1", "user1", "Bob", "Doe", "bob.doe@quotech.io",
+            "quotech-test", "Quotech", "Test Manager", io.quotech.codingtest.domain.UserRole.internal);
+    io.quotech.codingtest.domain.User user2 = mockDomainUser(
+            "client2", "user2", "John", "Smith", "john.smith@quotech.io",
+            "quotech-test", "Quotech", "Test Leader", io.quotech.codingtest.domain.UserRole.broker);
+    when(userRepository.findAll()).thenReturn(List.of(user1, user2));
+
+    final List<User> result = userService.getAllUsers("client1");
+
+    assertThat(result, hasSize(1));
+    assertThat(result.get(0).getUserId(), is("user1"));
+    assertThat(result.get(0).getMetadata().getFirstName(), is("Bob"));
   }
 
   @Test
@@ -87,6 +103,33 @@ public class UserServiceTest {
     assertThat(result.getMetadata().getCompanyName(), is(modelUser.getMetadata().getCompanyName()));
     assertThat(result.getMetadata().getJobTitle(), is(modelUser.getMetadata().getJobTitle()));
     assertThat(result.getMetadata().getRole(), is(modelUser.getMetadata().getRole()));
+  }
+
+  @Test
+  public void testDelete() {
+    io.quotech.codingtest.domain.User user1 = mockDomainUser(
+            "client1", "user1", "Bob", "Doe", "bob.doe@quotech.io",
+            "quotech-test", "Quotech", "Test Manager", io.quotech.codingtest.domain.UserRole.internal);
+    EntityId id = EntityId.builder().withClientId("client1").withId("user1").build();
+    when(userRepository.existsById(id)).thenReturn(true);
+
+    try {
+      userService.deleteUser("client1", "user1");
+      Assertions.assertTrue(true);
+    } catch(UserNotFoundException e) {
+      Assertions.assertTrue(false);
+    }
+  }
+
+  @Test
+  public void testDeleteThrowsException() {
+    io.quotech.codingtest.domain.User user1 = mockDomainUser(
+            "client1", "user1", "Bob", "Doe", "bob.doe@quotech.io",
+            "quotech-test", "Quotech", "Test Manager", io.quotech.codingtest.domain.UserRole.internal);
+    EntityId id = EntityId.builder().withClientId("client1").withId("user1").build();
+    when(userRepository.existsById(id)).thenReturn(false);
+
+    assertThrows(UserNotFoundException.class, () -> userService.deleteUser("client1", "user1"));
   }
 
   private io.quotech.codingtest.domain.User mockDomainUser(

@@ -19,8 +19,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UserResourceTest {
@@ -97,5 +96,11 @@ public class UserResourceTest {
 
     assertThrows(UserNotFoundException.class, () -> userResource.update("client1", "user1", user1));
 
+  }
+
+  @Test
+  public void whenDeletingNonExistingUser_willThrowException() throws UserNotFoundException {
+    doThrow(new UserNotFoundException()).when(userService).deleteUser("client1", "user1");
+    assertThrows(UserNotFoundException.class, () -> userResource.delete("client1", "user1"));
   }
 }
