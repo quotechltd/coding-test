@@ -2,15 +2,9 @@
 name: Java CI with Gradle
 
 on:
-  # Publish `main` as Docker `latest` image.
   push:
     branches:
-      - master
-  # Publish a release as a Docker specific version
-  release:
-    types:
-      - created
-      - edited
+      - main
 jobs:
   build:
     runs-on: ubuntu-latest
