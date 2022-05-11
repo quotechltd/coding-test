@@ -6,11 +6,10 @@ import io.quotech.codingtest.exception.UserAlreadyExistsException;
 import io.quotech.codingtest.exception.UserNotFoundException;
 import io.quotech.codingtest.exception.UserUpdateException;
 import io.quotech.codingtest.model.User;
-import io.quotech.codingtest.model.mapper.UserMapper;
+import io.quotech.codingtest.mapper.UserMapper;
 import io.quotech.codingtest.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
-import javax.swing.Action;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;

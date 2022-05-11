@@ -1,4 +1,4 @@
-package io.quotech.codingtest.model.mapper;
+package io.quotech.codingtest.mapper;
 
 import io.quotech.codingtest.model.ActionItem;
 import io.quotech.codingtest.model.User;
