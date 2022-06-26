@@ -1,4 +1,4 @@
-package io.quotech.codingtest.domain;
+package io.quotech.codingtest.entities;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
@@ -11,7 +11,6 @@ public class EntityId {
   private String id;
 
   public EntityId() {
-    super();
   }
 
   private EntityId(Builder builder) {

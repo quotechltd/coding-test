@@ -1,19 +1,20 @@
 package io.quotech.codingtest.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+import java.util.Objects;
 
 @JsonDeserialize (builder = User.Builder.class)
 public class User {
 
   private final String userId;
-  @JsonProperty ("user")
   private final UserMetadata metadata;
+  private final UserRole role;
 
-  private User(
-      Builder builder) {
-    this.userId = builder.userId;
-    this.metadata = builder.metadata;
+  public User(String userId, UserMetadata metadata, UserRole role) {
+    this.userId = userId;
+    this.metadata = metadata;
+    this.role = role;
   }
 
   public String getUserId() {
@@ -24,38 +25,46 @@ public class User {
     return metadata;
   }
 
-  /**
-   * Creates builder to build {@link User}.
-   *
-   * @return created builder
-   */
+  public UserRole getRole() {
+    return role;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    User user = (User) o;
+    return Objects.equals(userId, user.userId) && Objects.equals(metadata, user.metadata) && role == user.role;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(userId, metadata, role);
+  }
+
+  @Override
+  public String toString() {
+    return "User{" +
+            "userId='" + userId + '\'' +
+            ", metadata=" + metadata +
+            ", role=" + role +
+            '}';
+  }
+
   public static Builder builder() {
     return new Builder();
   }
 
-  public static Builder builder(User user) {
-    return new Builder(user);
-  }
-
-  /**
-   * Builder to build {@link User}.
-   */
   public static final class Builder {
     private String userId;
-    @JsonProperty ("user")
     private UserMetadata metadata;
+    private UserRole role;
 
     private Builder() {
     }
 
-    private Builder(
-        User user) {
-      this.userId = user.getUserId();
-      this.metadata = user.getMetadata();
-    }
-
-    public Builder withUserId(String id) {
-      this.userId = id;
+    public Builder withUserId(String userId) {
+      this.userId = userId;
       return this;
     }
 
@@ -64,8 +73,13 @@ public class User {
       return this;
     }
 
+    public Builder withRole(UserRole role) {
+      this.role = role;
+      return this;
+    }
+
     public User build() {
-      return new User(this);
+      return new User(userId, metadata, role);
     }
   }
 }

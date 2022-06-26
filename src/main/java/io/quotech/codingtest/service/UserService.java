@@ -1,16 +1,13 @@
 package io.quotech.codingtest.service;
 
-import io.quotech.codingtest.domain.ActionItem;
-import io.quotech.codingtest.domain.EntityId;
+import io.quotech.codingtest.entities.EntityId;
 import io.quotech.codingtest.exception.UserAlreadyExistsException;
 import io.quotech.codingtest.exception.UserNotFoundException;
-import io.quotech.codingtest.exception.UserUpdateException;
 import io.quotech.codingtest.model.User;
 import io.quotech.codingtest.mapper.UserMapper;
 import io.quotech.codingtest.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,57 +15,51 @@ import java.util.stream.Collectors;
 public class UserService {
 
   private final UserRepository userRepository;
+  private final UserMapper userMapper;
+  private final ClientIdProvider clientIdProvider;
 
-  public UserService(UserRepository userRepository) {
+  public UserService(UserRepository userRepository,
+                     UserMapper userMapper,
+                     ClientIdProvider clientIdProvider) {
     this.userRepository = userRepository;
+    this.userMapper = userMapper;
+    this.clientIdProvider = clientIdProvider;
   }
 
-  public List<User> getAllUsers(String clientId) {
-    return userRepository.findAll().stream()
-      .map(UserMapper::map)
-      .collect(Collectors.toList());
-  }
+  public User createUser(User user) throws UserAlreadyExistsException {
+    String clientId = clientIdProvider.getClientId();
 
-  public User getUser(String clientId, String userId) throws UserNotFoundException {
     EntityId id = EntityId.builder()
-      .withClientId(clientId)
-      .withId(userId)
-      .build();
-    return userRepository.findById(id)
-      .map(UserMapper::map)
-      .orElseThrow(UserNotFoundException::new);
-  }
-
-  public User createUser(String clientId, User user) throws UserAlreadyExistsException {
-    EntityId id = EntityId.builder()
-      .withClientId(clientId)
-      .withId(user.getUserId())
-      .build();
+            .withClientId(clientId)
+            .withId(user.getUserId())
+            .build();
 
     if (userRepository.existsById(id)) {
       throw new UserAlreadyExistsException();
     }
 
-    io.quotech.codingtest.domain.User domain = UserMapper.map(clientId, user);
-    domain.getMetadata().setAdded(ActionItem.builder()
-      .withActor("system")
-      .withTimestamp(LocalDateTime.now())
-      .build());
-    return UserMapper.map(userRepository.save(domain));
+    io.quotech.codingtest.entities.User entity = userMapper.map(clientId, user);
+    return userMapper.map(userRepository.save(entity));
   }
 
-  public User updateUser(String clientId, String userId, User user) throws UserUpdateException, UserNotFoundException {
-    if (!userId.equals(user.getUserId())) {
-      throw new UserUpdateException();
-    }
+  public User getUser(String userId) throws UserNotFoundException {
+    String clientId = clientIdProvider.getClientId();
+
     EntityId id = EntityId.builder()
       .withClientId(clientId)
-      .withId(user.getUserId())
+      .withId(userId)
       .build();
-    if (!userRepository.existsById(id)) {
-      throw new UserNotFoundException();
-    }
-    io.quotech.codingtest.domain.User domain = UserMapper.map(clientId, user);
-    return UserMapper.map(userRepository.save(domain));
+
+    return userRepository.findById(id)
+      .map(userMapper::map)
+      .orElseThrow(UserNotFoundException::new);
+  }
+
+  public List<User> getAllUsers() {
+
+    return userRepository.findAll()
+            .stream()
+            .map(userMapper::map)
+            .collect(Collectors.toList());
   }
 }
