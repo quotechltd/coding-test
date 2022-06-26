@@ -9,7 +9,7 @@ public class UserNotFoundException extends Exception {
   private static final long serialVersionUID = 2532865606236881125L;
 
   public UserNotFoundException () {
-    super();
+
   }
 
   public UserNotFoundException(

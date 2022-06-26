@@ -1,12 +1,9 @@
-package io.quotech.codingtest.domain;
+package io.quotech.codingtest.entities;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 @JsonDeserialize (builder = User.Builder.class)
@@ -15,65 +12,62 @@ public class User {
 
   @Id
   private EntityId id;
-  @Field ("user")
   private UserMetadata metadata;
-
-  private User(
-      Builder builder) {
-    this.id = builder.id;
-    this.metadata = builder.metadata;
-  }
+  private UserRole role;
 
   public User() {
-    super();
+  }
+
+  public User(EntityId id,
+              UserMetadata metadata,
+              UserRole role) {
+    this.id = id;
+    this.metadata = metadata;
+    this.role = role;
   }
 
   public EntityId getId() {
     return id;
   }
 
-  public void setId(EntityId id) {
-    this.id = id;
-  }
-
   public UserMetadata getMetadata() {
     return metadata;
   }
 
-  public void setMetadata(UserMetadata metadata) {
-    this.metadata = metadata;
+  public UserRole getRole() {
+    return role;
   }
 
   @Override
   public boolean equals(Object o) {
-    if (this == o)
-      return true;
-    if (o == null || getClass() != o.getClass())
-      return false;
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
     User user = (User) o;
-    return Objects.equals(id, user.id) && Objects.equals(metadata, user.metadata);
+    return Objects.equals(id, user.id) && Objects.equals(metadata, user.metadata) && role == user.role;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, metadata);
+    return Objects.hash(id, metadata, role);
   }
 
-  /**
-   * Creates builder to build {@link User}.
-   *
-   * @return created builder
-   */
+  @Override
+  public String toString() {
+    return "User{" +
+            "id=" + id +
+            ", metadata=" + metadata +
+            ", role=" + role +
+            '}';
+  }
+
   public static Builder builder() {
     return new Builder();
   }
 
-  /**
-   * Builder to build {@link User}.
-   */
   public static final class Builder {
     private EntityId id;
     private UserMetadata metadata;
+    private UserRole role;
 
     private Builder() {
     }
@@ -88,8 +82,13 @@ public class User {
       return this;
     }
 
+    public Builder withRole(UserRole role) {
+      this.role = role;
+      return this;
+    }
+
     public User build() {
-      return new User(this);
+      return new User(id, metadata, role);
     }
   }
 }

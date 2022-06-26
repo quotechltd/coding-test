@@ -1,4 +1,4 @@
-package io.quotech.codingtest.domain;
+package io.quotech.codingtest.entities;
 
 public enum UserRole {
   internal,

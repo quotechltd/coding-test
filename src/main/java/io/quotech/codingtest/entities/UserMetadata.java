@@ -1,6 +1,5 @@
-package io.quotech.codingtest.model;
+package io.quotech.codingtest.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import java.util.Objects;
@@ -8,11 +7,14 @@ import java.util.Objects;
 @JsonDeserialize (builder = UserMetadata.Builder.class)
 public class UserMetadata {
 
-  private final String firstName;
-  private final String lastName;
-  private final String emailAddress;
-  private final String companyId;
-  private final String officeId;
+  private String firstName;
+  private String lastName;
+  private String emailAddress;
+  private String companyId;
+  private String officeId;
+
+  public UserMetadata() {
+  }
 
   public UserMetadata(String firstName,
                       String lastName,
@@ -73,7 +75,7 @@ public class UserMetadata {
   public static Builder builder() {
     return new Builder();
   }
-  
+
   public static final class Builder {
     private String firstName;
     private String lastName;
