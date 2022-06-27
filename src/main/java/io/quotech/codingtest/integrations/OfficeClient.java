@@ -7,7 +7,7 @@ import java.util.List;
 @Component
 public class OfficeClient {
 
-    public List<Office> getAddressForCompany(String companyId) {
-        return List.of();
+    public List<Office> getAddressesForOrganisation(String organisationId) {
+        throw new UnsupportedOperationException();
     }
 }

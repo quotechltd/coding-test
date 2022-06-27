@@ -7,54 +7,44 @@ import java.util.StringJoiner;
 
 @JsonDeserialize (builder = EntityId.Builder.class)
 public class EntityId {
-  private String clientId;
+  private String organisationId;
   private String id;
 
   public EntityId() {
   }
 
   private EntityId(Builder builder) {
-    this.clientId = builder.clientId;
+    this.organisationId = builder.organisationId;
     this.id = builder.id;
   }
 
-  public String getClientId() {
-    return clientId;
-  }
-
-  public void setClientId(String clientId) {
-    this.clientId = clientId;
+  public String getOrganisationId() {
+    return organisationId;
   }
 
   public String getId() {
     return id;
   }
 
-  public void setId(String id) {
-    this.id = id;
-  }
-
   @Override
   public boolean equals(Object o) {
-    if (this == o)
-      return true;
-    if (o == null || getClass() != o.getClass())
-      return false;
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
     EntityId entityId = (EntityId) o;
-    return Objects.equals(clientId, entityId.clientId) && Objects.equals(id, entityId.id);
+    return Objects.equals(organisationId, entityId.organisationId) && Objects.equals(id, entityId.id);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(clientId, id);
+    return Objects.hash(organisationId, id);
   }
 
   @Override
   public String toString() {
-    return new StringJoiner(", ", EntityId.class.getSimpleName() + "[", "]")
-        .add("clientId='" + clientId + "'")
-        .add("id='" + id + "'")
-        .toString();
+    return "EntityId{" +
+            "organisationId='" + organisationId + '\'' +
+            ", id='" + id + '\'' +
+            '}';
   }
 
   public static Builder builder() {
@@ -62,11 +52,11 @@ public class EntityId {
   }
 
   public static class Builder {
-    private String clientId;
+    private String organisationId;
     private String id;
 
-    public Builder withClientId(String clientId) {
-      this.clientId = clientId;
+    public Builder withOrganisationId(String organisationId) {
+      this.organisationId = organisationId;
       return this;
     }
 
