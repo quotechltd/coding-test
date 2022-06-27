@@ -7,7 +7,7 @@ import java.util.List;
 @Component
 public class OfficeClient {
 
-    public List<Office> getAddressForCompany(String companyId) {
+    public List<Office> getAddressForClient(String clientId) {
         return List.of();
     }
 }

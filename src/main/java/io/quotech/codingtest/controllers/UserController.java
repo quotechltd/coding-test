@@ -2,6 +2,7 @@ package io.quotech.codingtest.controllers;
 
 import io.quotech.codingtest.exception.UserAlreadyExistsException;
 import io.quotech.codingtest.exception.UserNotFoundException;
+import io.quotech.codingtest.model.AddressLabel;
 import io.quotech.codingtest.model.User;
 import io.quotech.codingtest.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -45,4 +46,11 @@ public class UserController {
     return ResponseEntity.ok(
             userService.getAllUsers());
   }
+
+  @GetMapping ("/address")
+  public ResponseEntity<List<AddressLabel>> getAll() {
+    return ResponseEntity.ok(
+            userService.getAllUsers());
+  }
+
 }
