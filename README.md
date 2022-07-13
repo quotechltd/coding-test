@@ -36,7 +36,7 @@ The `UserController` has been implemented to give three endpoints:
 
 * `api/v1/users` Post - creates a user with given data
 * `api/v1/users/{userId}` Get - returns user data for the user with given Id
-* `api/v1/users` Get - returns all user data
+* `api/v1/users` Get - returns all user data for requesters organisation
 
 The User data consists of an id, metadata(name, email, companyId and officeId) and role.
 
@@ -44,7 +44,7 @@ This is tested in UserControllerTest.
 
 ### TASK 1: 
 The getAll endpoint has a failing test. 
-The list of users returned includes all users for all clients.
+The list of users returned includes all users for all organisations.
 
 ### Task 2:
 We now need a new endpoint which can return user address labels.
