@@ -96,10 +96,7 @@ public class UserService {
       AddressLabel.Builder builder = AddressLabel.builder()
               .withName(metadata.getFirstName() + " " + metadata.getLastName())
               .withCompany(companyClient.getCompanyName(metadata.getCompanyId()))
-              .withFirstLine(address.getFirstLine())
-              .withSecondLine(address.getSecondLine())
-              .withCity(address.getCity())
-              .withPostcode(address.getPostcode());
+              .withAddress(address);
     }
 
     return addresses;

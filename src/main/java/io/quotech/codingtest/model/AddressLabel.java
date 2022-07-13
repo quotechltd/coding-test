@@ -1,5 +1,7 @@
 package io.quotech.codingtest.model;
 
+import io.quotech.codingtest.integrations.Address;
+
 import java.util.Objects;
 
 public class AddressLabel {
@@ -82,6 +84,16 @@ public class AddressLabel {
         private String postcode;
 
         private Builder() {
+        }
+
+        public Builder withAddress(Address address) {
+            if (address != null) {
+                this.firstLine = address.getFirstLine();
+                this.secondLine = address.getSecondLine();
+                this.city = address.getCity();
+                this.postcode = address.getPostcode();
+            }
+            return this;
         }
 
         public Builder withName(String name) {
