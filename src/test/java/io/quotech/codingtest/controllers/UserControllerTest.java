@@ -69,7 +69,7 @@ public class UserControllerTest {
             .willReturn("quotech-test", "quotech-test", "lloyds-test", "quotech-test");
     userController.create(TestUserData.USER1);
     userController.create(TestUserData.USER2);
-    userController.create(TestUserData.USER3);
+    userController.create(TestUserData.USER3); // user from different organisation
 
     ResponseEntity<List<User>> result = userController.getAll();
 

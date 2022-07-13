@@ -4,6 +4,7 @@ import io.quotech.codingtest.exception.UserAlreadyExistsException;
 import io.quotech.codingtest.exception.UserNotFoundException;
 import io.quotech.codingtest.model.User;
 import io.quotech.codingtest.service.UserService;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
