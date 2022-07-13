@@ -16,21 +16,21 @@ public class UserService {
 
   private final UserRepository userRepository;
   private final UserMapper userMapper;
-  private final ClientIdProvider clientIdProvider;
+  private final OrganisationIdProvider organisationIdProvider;
 
   public UserService(UserRepository userRepository,
                      UserMapper userMapper,
-                     ClientIdProvider clientIdProvider) {
+                     OrganisationIdProvider organisationIdProvider) {
     this.userRepository = userRepository;
     this.userMapper = userMapper;
-    this.clientIdProvider = clientIdProvider;
+    this.organisationIdProvider = organisationIdProvider;
   }
 
   public User createUser(User user) throws UserAlreadyExistsException {
-    String clientId = clientIdProvider.getClientId();
+    String organisationId = organisationIdProvider.getOrganisationId();
 
     EntityId id = EntityId.builder()
-            .withClientId(clientId)
+            .withOrganisationId(organisationId)
             .withId(user.getUserId())
             .build();
 
@@ -38,15 +38,15 @@ public class UserService {
       throw new UserAlreadyExistsException();
     }
 
-    io.quotech.codingtest.entities.User entity = userMapper.map(clientId, user);
+    io.quotech.codingtest.entities.User entity = userMapper.map(organisationId, user);
     return userMapper.map(userRepository.save(entity));
   }
 
   public User getUser(String userId) throws UserNotFoundException {
-    String clientId = clientIdProvider.getClientId();
+    String organisationId = organisationIdProvider.getOrganisationId();
 
     EntityId id = EntityId.builder()
-      .withClientId(clientId)
+      .withOrganisationId(organisationId)
       .withId(userId)
       .build();
 

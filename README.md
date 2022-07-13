@@ -1,6 +1,8 @@
 # Users service
-This is a multi-tenant (client) service which exposes a REST API to manage users. It is built using Spring Boot and Gradle as dependency manager.
+This is a multi-tenant (organisation) service which exposes a REST API to manage users. It is built using Spring Boot and Gradle as dependency manager.
 It uses an embedded version of MongoDB to write/read data and implements the standard CRUD functionalities.
+
+Request are authenticated and from this an organisation id is determined. The organisation can be got from the `OrganisationIdProvider` class.
 
 The application is structured using the following layers, which also reflect on the package name.
 

@@ -24,9 +24,9 @@ public class UserMapper {
             .build();
   }
 
-  public io.quotech.codingtest.entities.User map(String clientId, User model) {
+  public io.quotech.codingtest.entities.User map(String organisationId, User model) {
     EntityId entityId = EntityId.builder()
-            .withClientId(clientId)
+            .withOrganisationId(organisationId)
             .withId(model.getUserId())
             .build();
 

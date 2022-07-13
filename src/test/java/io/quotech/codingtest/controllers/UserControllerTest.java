@@ -3,7 +3,7 @@ package io.quotech.codingtest.controllers;
 import io.quotech.codingtest.exception.UserAlreadyExistsException;
 import io.quotech.codingtest.exception.UserNotFoundException;
 import io.quotech.codingtest.model.User;
-import io.quotech.codingtest.service.ClientIdProvider;
+import io.quotech.codingtest.service.OrganisationIdProvider;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,7 @@ import static org.mockito.BDDMockito.given;
 public class UserControllerTest {
 
   @MockBean
-  private ClientIdProvider clientIdProvider;
+  private OrganisationIdProvider organisationIdProvider;
 
   @Autowired
   private UserController userController;
@@ -38,7 +38,7 @@ public class UserControllerTest {
 
   @BeforeEach
   void setup() {
-    given(clientIdProvider.getClientId()).willReturn("quotech-test");
+    given(organisationIdProvider.getOrganisationId()).willReturn("quotech-test");
   }
 
   @AfterEach
@@ -65,7 +65,7 @@ public class UserControllerTest {
 
   @Test
   void givenMultipleUserExist_whenGetAll_onlyClintUsersReturned() throws UserAlreadyExistsException {
-    given(clientIdProvider.getClientId())
+    given(organisationIdProvider.getOrganisationId())
             .willReturn("quotech-test", "quotech-test", "lloyds-test", "quotech-test");
     userController.create(TestUserData.USER1);
     userController.create(TestUserData.USER2);
