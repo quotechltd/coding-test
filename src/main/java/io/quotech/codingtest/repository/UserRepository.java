@@ -10,7 +10,6 @@ import org.springframework.data.mongodb.repository.Query;
 import java.util.List;
 
 public interface UserRepository extends MongoRepository<User, EntityId> {
-
-    @Query(value = "{'_id.clientId': ?0}")
-    List<User> getAllByClientId(String clientId);
+    @Query(value = "{'_id.organisationId': ?0}")
+    List<User> getAllByOrganisationId(String clientId);
 }
