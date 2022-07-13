@@ -91,7 +91,8 @@ public class UserService {
 
     for (User user: users) {
       UserMetadata metadata = user.getMetadata();
-      Address address = offices.get(metadata.getOfficeId()).getAddress();
+      String officeId = metadata.getOfficeId();
+      Address address = (officeId!=null)?offices.get(officeId).getAddress():null;
 
       AddressLabel.Builder builder = AddressLabel.builder()
               .withName(metadata.getFirstName() + " " + metadata.getLastName())
