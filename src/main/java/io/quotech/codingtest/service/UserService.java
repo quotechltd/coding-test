@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -86,16 +87,11 @@ public class UserService {
             .collect(Collectors.toList());
 
     List<AddressLabel> addresses = new ArrayList<>();
-    List<Office> offices = officeClient.getAddressesForOrganisation(organisationId);
+    Map<Integer, Office> offices = officeClient.getAddressesForOrganisation(organisationId);
 
     for (User user: users) {
       UserMetadata metadata = user.getMetadata();
-
-      Address address = offices.stream()
-              .filter(x -> x.getOfficeId().equals(metadata.getOfficeId()))
-              .findFirst()
-              .get()
-              .getAddress();
+      Address address = offices.get(metadata.getOfficeId()).getAddress();
 
       AddressLabel.Builder builder = AddressLabel.builder()
               .withName(metadata.getFirstName() + " " + metadata.getLastName())
