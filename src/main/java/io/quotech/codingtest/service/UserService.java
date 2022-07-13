@@ -56,8 +56,9 @@ public class UserService {
   }
 
   public List<User> getAllUsers() {
+    String organisationId = organisationIdProvider.getOrganisationId();
 
-    return userRepository.findAll()
+    return userRepository.getAllByOrganisationId(organisationId)
             .stream()
             .map(userMapper::map)
             .collect(Collectors.toList());
